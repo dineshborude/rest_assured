@@ -4,8 +4,6 @@ public class Validations {
 
     public static void main(String[] args) {
 
-//
-//                6. Verify if Sum of all Course prices matches with Purchase Amount
 
         JsonPath json = new JsonPath(Payload.jsonValidation());
         System.out.println("Print No of courses returned by API : " +json.getInt("courses.size()"));
@@ -20,9 +18,11 @@ public class Validations {
                             json.getInt("courses[" + i + "].price")
             );
             sum += json.getInt("courses[" +i+"].price") * json.getInt("courses[" +i+"].copies") ;
-        }
 
-        System.out.println("Print no of copies sold by RPA Course : " +json.getInt("courses[2].copies"));
+            if(json.getString("courses[" + i + "].title").equalsIgnoreCase("RPA")){
+                System.out.println("no of copies sold by RPA Course : " +json.getInt("courses[2].copies"));
+            }
+        }
 
         // Verify if Sum of all Course prices matches with Purchase Amount
         System.out.println("Sum of all Course prices matches with Purchase Amount : "+sum +","+json.getInt("dashboard.purchaseAmount"));
