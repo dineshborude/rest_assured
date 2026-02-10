@@ -1,42 +1,57 @@
 import io.restassured.RestAssured;
+import io.restassured.RestAssured.*;
 import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 
 public class Basics {
 
-    public static void main(String[] args) {
+    @Test
+    public void addUpdateAndVerifyPlace() {
 
         RestAssured.baseURI = "https://rahulshettyacademy.com";
-        Response response =
+
+        // ADD PLACE
+        String addResponse =
+                given()
+                        .queryParam("key", "qaclick123")
+                        .contentType("application/json")
+                        .body(Payload.addPlace())
+                        .when()
+                        .post("/maps/api/place/add/json")
+                        .then()
+                        .statusCode(200)
+                        .extract().asString();
+
+        JsonPath addJs = new JsonPath(addResponse);
+        String placeID = addJs.getString("place_id");
+
+        // UPDATE PLACE
         given()
-                .queryParam("key", "qaclick123")
+                .queryParam("key","qaclick123")
                 .contentType("application/json")
-                .body(Payload.addPlace())
+                .body(Payload.updatePlace(placeID, "Shahartakli, Shevgaon"))
                 .when()
-                .post("/maps/api/place/add/json")
+                .put("maps/api/place/update/json")
                 .then()
                 .statusCode(200)
-                .body("status", equalTo("OK"))
-                .body("scope", equalTo("APP"))
-                .body("place_id", notNullValue())
-                .header("server", "Apache/2.4.52 (Ubuntu)")
-                .extract().response();
+                .body("msg", equalTo("Address successfully updated"));
 
-        String responseString = response.asString();
-        System.out.println(responseString);
+        // GET & VERIFY
+        String getResponse =
+                given()
+                        .queryParam("key","qaclick123")
+                        .queryParam("place_id", placeID)
+                        .when()
+                        .get("maps/api/place/get/json")
+                        .then()
+                        .statusCode(200)
+                        .extract().asString();
 
-        JsonPath jsResponse = new JsonPath(responseString);
-
-        String placeID = jsResponse.getString("place_id");
-
-        // Update place now
-
-        given().queryParam("key","qaclick123")
-                .contentType("application/json")
-                .body();
-
+        JsonPath getJs = new JsonPath(getResponse);
+        Assert.assertEquals(getJs.getString("address"), "Shahartakli, Shevgaon");
     }
 }

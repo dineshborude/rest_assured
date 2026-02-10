@@ -1,7 +1,6 @@
 public class Payload {
 
     public static String addPlace() {
-
         return """
         {
           "location": {
@@ -18,4 +17,66 @@ public class Payload {
         }
         """;
     }
+
+    public static String updatePlace(String placeID, String newAddress) {
+        return """
+        {
+          "place_id": "%s",
+          "address": "%s",
+          "key": "qaclick123"
+        }
+        """.formatted(placeID, newAddress);
+    }
+
+    public static String jsonValidation() {
+        return """
+                                
+               {
+                                
+                "dashboard": {
+                                
+                "purchaseAmount": 910,
+                                
+                "website": "rahulshettyacademy.com"
+                                
+               },
+                                
+                "courses": [
+                                
+                {
+                                
+                "title": "Selenium Python",
+                                
+                "price": 50,
+                                
+                "copies": 6
+                                
+                },
+                                
+                {
+                                
+                "title": "Cypress",
+                                
+                "price": 40,
+                                
+                "copies": 4
+                                
+                },
+                                
+                {
+                                
+                "title": "RPA",
+                                
+                "price": 45,
+                                
+                "copies": 10
+                                
+                }
+                                
+                ]
+                                
+               }
+                """;
+    }
+
 }
