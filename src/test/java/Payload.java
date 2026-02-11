@@ -79,4 +79,19 @@ public class Payload {
                 """;
     }
 
+    public static String addBook(String name, String isbn, String aisle) {
+
+
+
+        return """
+            {
+                "name":"%s",
+                "isbn":"%s",
+                "aisle":"%s",
+                "author":"Danny Daddy"
+            }
+            """.formatted(name,isbn,aisle);
+    }
+
+
 }
