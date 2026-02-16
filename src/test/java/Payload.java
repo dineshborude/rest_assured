@@ -94,4 +94,41 @@ public class Payload {
     }
 
 
+    public static String bugBody() {
+
+        String title = java.util.UUID.randomUUID().toString().substring(0,5);
+
+        return """
+                {
+                  "fields": {
+                    "project": {
+                      "key": "SCRUM"
+                    },
+                    "summary": "%s fields are not working.",
+                    "description": {
+                      "type": "doc",
+                      "version": 1,
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "Creating of an issue using project keys and issue type names using the REST API"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    "issuetype": {
+                      "name": "Bug"
+                    }
+                  }
+                }
+                                
+                """.formatted(title);
+
+    }
+
+
 }
